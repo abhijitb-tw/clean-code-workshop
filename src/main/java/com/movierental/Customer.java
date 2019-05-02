@@ -23,17 +23,17 @@ public class Customer {
     double totalAmount = 0;
     int frequentRenterPoints = 0;
     String result = "Rental Record for " + getName() + "\n";
-    for (Rental each : rentals) {
-      double thisAmount = amountFor(each);
+    for (Rental rental : rentals) {
+      double thisAmount = rental.amount();
       // add frequent renter points
       frequentRenterPoints++;
       // add bonus for a two day new release rental
-      if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE)
+      if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE)
           &&
-          each.getDaysRented() > RentalCategory.NEW_RELEASE.getMinRentPeriod()) frequentRenterPoints++;
+          rental.getDaysRented() > RentalCategory.NEW_RELEASE.getMinRentPeriod()) frequentRenterPoints++;
 
       //show figures for this rental
-      result += "\t" + each.getMovie().getTitle() + "\t" +
+      result += "\t" + rental.getMovie().getTitle() + "\t" +
           String.valueOf(thisAmount) + "\n";
       totalAmount += thisAmount;
     }
@@ -43,28 +43,6 @@ public class Customer {
     result += "You earned " + String.valueOf(frequentRenterPoints)
         + " frequent renter points";
     return result;
-  }
-
-  private double amountFor(Rental rental) {
-    RentalCategory category = getRentalCategory(rental);
-    double amount = category.getBaseCharge();
-    if(rental.getDaysRented() > category.getMinRentPeriod()) {
-      amount += (rental.getDaysRented() - category.getMinRentPeriod()) * category.getSurcharge();
-    }
-    return amount;
-  }
-
-  private RentalCategory getRentalCategory(Rental rental) {
-    switch (rental.getMovie().getPriceCode()) {
-      case Movie.REGULAR:
-        return RentalCategory.REGULAR;
-      case Movie.CHILDRENS:
-        return RentalCategory.CHILDREN;
-      case Movie.NEW_RELEASE:
-        return RentalCategory.NEW_RELEASE;
-    }
-
-    throw new UnsupportedOperationException(String.format("%d: Unsupported Price Code", rental.getMovie().getPriceCode()));
   }
 }
 
