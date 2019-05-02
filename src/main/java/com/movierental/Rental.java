@@ -40,5 +40,12 @@ public class Rental {
     return amount;
   }
 
+  public int frequentRenterPoints() {
+    int frp = 1;
+    if((getRentalCategory() == RentalCategory.NEW_RELEASE) && getDaysRented() > RentalCategory.NEW_RELEASE.getMinRentPeriod())
+      ++frp;
+    return frp;
+  }
+
 
 }
