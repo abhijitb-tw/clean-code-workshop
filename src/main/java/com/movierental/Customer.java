@@ -32,7 +32,7 @@ public class Customer {
 
     //add footer lines result
     result += "Amount owed is " + getTotalAmount() + "\n";
-    result += "You earned " + getTotalAmount()
+    result += "You earned " + getTotalFRP()
         + " frequent renter points";
     return result;
   }
