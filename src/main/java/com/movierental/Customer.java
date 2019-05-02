@@ -20,24 +20,39 @@ public class Customer {
   }
 
   public String statement() {
-    double totalAmount = 0;
-    int frequentRenterPoints = 0;
     String result = "Rental Record for " + getName() + "\n";
-    for (Rental rental : rentals) {
-      double thisAmount = rental.amount();
-      frequentRenterPoints += rental.frequentRenterPoints();
 
+    // This refactor, however, forces amount to be calculated twice!!
+
+    for (Rental rental : rentals) {
       //show figures for this rental
       result += "\t" + rental.getMovie().getTitle() + "\t" +
-          String.valueOf(thisAmount) + "\n";
-      totalAmount += thisAmount;
+          String.valueOf(rental.amount()) + "\n";
     }
 
     //add footer lines result
-    result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
-    result += "You earned " + String.valueOf(frequentRenterPoints)
+    result += "Amount owed is " + getTotalAmount() + "\n";
+    result += "You earned " + getTotalAmount()
         + " frequent renter points";
     return result;
+  }
+
+  private int getTotalFRP() {
+      int frp = 0;
+      for (Rental rental : this.rentals) {
+          frp += rental.frequentRenterPoints();
+      }
+
+      return frp;
+  }
+
+
+  private double getTotalAmount() {
+      double amount = 0;
+      for (Rental rental: this.rentals) {
+          amount += rental.amount();
+      }
+      return amount;
   }
 }
 
