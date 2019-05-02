@@ -1,9 +1,9 @@
 package com.movierental;
 
 /**
- * {@link RentalCalc} performs rental calculation including amount and frequent renter points
+ * {@link RentalCategory} performs rental calculation including amount and frequent renter points
  */
-enum RentalCalc {
+enum RentalCategory {
     REGULAR(Movie.REGULAR, 2, 2, 1.5),
     CHILDREN(Movie.CHILDRENS, 3, 1.5, 1.5),
     NEW_RELEASE(Movie.NEW_RELEASE, 1, 3, 3);
@@ -13,7 +13,7 @@ enum RentalCalc {
     private final double baseCharge;
     private final double surcharge;
 
-    RentalCalc(int movieCategory, int minRentPeriod, double baseCharge, double surcharge) {
+    RentalCategory(int movieCategory, int minRentPeriod, double baseCharge, double surcharge) {
         this.movieCategory = movieCategory;
         this.minRentPeriod = minRentPeriod;
         this.baseCharge = baseCharge;
