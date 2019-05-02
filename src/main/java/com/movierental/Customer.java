@@ -1,40 +1,34 @@
 package com.movierental;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Customer {
   private String name;
-  private List<Rental> rentals = new ArrayList<>();
+  private final RentalCollection rentals = new RentalCollection(new ArrayList<>());
 
   public Customer(String name) {
     this.name = name;
   }
 
-  public void addRental(Rental arg) {
-    rentals.add(arg);
+  public void addRental(Rental rental) {
+    rentals.addRental(rental);
   }
 
   public String getName() {
     return name;
   }
 
+  public RentalCollection getRentals() {
+      return this.rentals;
+  }
+
   public String statement() {
-      Statement statement = new TextStatement(this, rentals);
+      Statement statement = new TextStatement(this.name, rentals);
       return statement.statement();
   }
 
-  public int getTotalFRP() {
-      return this.rentals.stream().mapToInt(Rental::frequentRenterPoints).sum();
-  }
-
-
-  public double getTotalAmount() {
-      return this.rentals.stream().mapToDouble(Rental::amount).sum();
-  }
-
   public String htmlStatement() {
-      Statement statement = new HtmlStatement(this, this.rentals);
+      Statement statement = new HtmlStatement(this.name, this.rentals);
       return statement.statement();
   }
 }

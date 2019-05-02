@@ -1,26 +1,24 @@
 package com.movierental;
 
-import java.util.List;
-
 public class HtmlStatement implements Statement {
-    private final Customer customer;
-    private final List<Rental> rentals;
+    private final String name;
+    private final RentalCollection rentals;
 
-    public HtmlStatement(Customer customer, List<Rental> rentals) {
-        this.customer = customer;
+    public HtmlStatement(String name, RentalCollection rentals) {
+        this.name = name;
         this.rentals = rentals;
     }
 
     @Override
     public String header() {
-        return String.format("<H1>Rental Record for <B>%s</B></H1>", this.customer.getName());
+        return String.format("<H1>Rental Record for <B>%s</B></H1>", this.name);
     }
 
     @Override
     public String footer() {
         StringBuilder footerBuilder = new StringBuilder();
-        footerBuilder.append(String.format("Amount owed is <B>%s</B>.<BR/>", this.customer.getTotalAmount()));
-        footerBuilder.append(String.format("You earned <B>%s</B> frequent renter points.<BR/>", this.customer.getTotalFRP()));
+        footerBuilder.append(String.format("Amount owed is <B>%s</B>.<BR/>", this.rentals.getTotalAmount()));
+        footerBuilder.append(String.format("You earned <B>%s</B> frequent renter points.<BR/>", this.rentals.getTotalFRP()));
         return footerBuilder.toString();
     }
 

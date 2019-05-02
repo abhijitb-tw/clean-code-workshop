@@ -115,12 +115,8 @@ public class CustomerTest {
     }
 
     private String expectedHtmlStatement(List<Rental> rentals) {
-        Statement htmlStmt = new HtmlStatement(customer, rentals);
-        StringBuilder htmlBuilder = new StringBuilder();
-        htmlBuilder.append(htmlStmt.header());
-        htmlBuilder.append(htmlStmt.body());
-        htmlBuilder.append(htmlStmt.footer());
-        return htmlBuilder.toString();
+        Statement htmlStmt = new HtmlStatement(customer.getName(), new RentalCollection(rentals));
+        return htmlStmt.header() + htmlStmt.body() + htmlStmt.footer();
     }
 
     private Customer customer;
@@ -136,13 +132,13 @@ public class CustomerTest {
 
     @Test
     public void testHtmlHeaderFormat() {
-        Statement htmlStmt = new HtmlStatement(customer, new ArrayList<>());
+        Statement htmlStmt = new HtmlStatement(customer.getName(), new RentalCollection(new ArrayList<>()));
         Assert.assertEquals(String.format("<H1>Rental Record for <B>%s</B></H1>", customer.getName()), htmlStmt.header());
     }
 
     @Test
     public void testHtmlFooterFormat() {
-        Statement htmlStmt = new HtmlStatement(customer, new ArrayList<>());
+        Statement htmlStmt = new HtmlStatement(customer.getName(), new RentalCollection(new ArrayList<>()));
         String expectedFooterFormat = String.format("Amount owed is <B>%s</B>.<BR/>You earned <B>%s</B> frequent renter points.<BR/>", 0.0, 0);
         Assert.assertEquals(expectedFooterFormat, htmlStmt.footer());
     }
