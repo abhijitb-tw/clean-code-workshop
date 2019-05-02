@@ -28,17 +28,17 @@ public class Customer {
       //determine amounts for each line
       switch (each.getMovie().getPriceCode()) {
         case Movie.REGULAR:
-          thisAmount += 2;
-          if (each.getDaysRented() > 2)
-            thisAmount += (each.getDaysRented() - 2) * 1.5;
+          thisAmount += RentalCalc.REGULAR.getBaseCharge();
+          if (each.getDaysRented() > RentalCalc.REGULAR.getMinRentPeriod())
+            thisAmount += (each.getDaysRented() - RentalCalc.REGULAR.getMinRentPeriod()) * RentalCalc.REGULAR.getSurcharge();
           break;
         case Movie.NEW_RELEASE:
-          thisAmount += each.getDaysRented() * 3;
+          thisAmount += each.getDaysRented() * RentalCalc.NEW_RELEASE.getSurcharge();
           break;
         case Movie.CHILDRENS:
-          thisAmount += 1.5;
-          if (each.getDaysRented() > 3)
-            thisAmount += (each.getDaysRented() - 3) * 1.5;
+          thisAmount += RentalCalc.CHILDREN.getBaseCharge();
+          if (each.getDaysRented() > RentalCalc.CHILDREN.getMinRentPeriod())
+            thisAmount += (each.getDaysRented() - RentalCalc.CHILDREN.getMinRentPeriod()) * RentalCalc.CHILDREN.getSurcharge();
           break;
       }
       // add frequent renter points
@@ -46,7 +46,7 @@ public class Customer {
       // add bonus for a two day new release rental
       if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE)
           &&
-          each.getDaysRented() > 1) frequentRenterPoints++;
+          each.getDaysRented() > RentalCalc.NEW_RELEASE.getMinRentPeriod()) frequentRenterPoints++;
 
       //show figures for this rental
       result += "\t" + each.getMovie().getTitle() + "\t" +
