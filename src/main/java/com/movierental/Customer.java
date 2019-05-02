@@ -38,21 +38,12 @@ public class Customer {
   }
 
   private int getTotalFRP() {
-      int frp = 0;
-      for (Rental rental : this.rentals) {
-          frp += rental.frequentRenterPoints();
-      }
-
-      return frp;
+      return this.rentals.stream().mapToInt(Rental::frequentRenterPoints).sum();
   }
 
 
   private double getTotalAmount() {
-      double amount = 0;
-      for (Rental rental: this.rentals) {
-          amount += rental.amount();
-      }
-      return amount;
+      return this.rentals.stream().mapToDouble(Rental::amount).sum();
   }
 }
 
