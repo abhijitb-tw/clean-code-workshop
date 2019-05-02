@@ -26,7 +26,7 @@ public class RentalCollection {
         return this.rentals.stream().mapToDouble(Rental::amount).sum();
     }
 
-    public void forEach(Consumer<Rental> acceptor) {
-        this.rentals.forEach(acceptor::accept);
+    public void forEach(Consumer<Rental> consumer) {
+        this.rentals.forEach(consumer::accept);
     }
 }
