@@ -42,9 +42,13 @@ public class Rental {
 
   public int frequentRenterPoints() {
     int frp = 1;
-    if((getRentalCategory() == RentalCategory.NEW_RELEASE) && getDaysRented() > RentalCategory.NEW_RELEASE.getMinRentPeriod())
+    if(canApplyBonus())
       ++frp;
     return frp;
+  }
+
+  private boolean canApplyBonus() {
+    return (getRentalCategory() == RentalCategory.NEW_RELEASE) && getDaysRented() > RentalCategory.NEW_RELEASE.getMinRentPeriod();
   }
 
 
