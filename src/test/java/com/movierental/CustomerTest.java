@@ -114,6 +114,19 @@ public class CustomerTest {
         return rentalStatement(newRelease, 0, 0, 3, nr -> nr.getDaysRented() > 1 ? 2 : 1);
     }
 
+    private static String expectedHtmlBody(List<Rental> rentals) {
+        StringBuilder htmlBuilder = new StringBuilder();
+        rentals.forEach(rental -> htmlBuilder.append(Customer.htmlLineBody(rental)) );
+        return htmlBuilder.toString();
+    }
+
+    private String expectedHtmlStatement(List<Rental> rentals) {
+        StringBuilder htmlBuilder = new StringBuilder();
+        htmlBuilder.append(customer.htmlHeader());
+        htmlBuilder.append(expectedHtmlBody(rentals));
+        htmlBuilder.append(customer.htmlFooter());
+        return htmlBuilder.toString();
+    }
 
     private Customer customer;
 
@@ -124,6 +137,17 @@ public class CustomerTest {
 
     @Test
     public void test() {
+    }
+
+    @Test
+    public void testHtmlHeaderFormat() {
+        Assert.assertEquals(String.format("<H1>Rental Record for %s</H1>", customer.getName()), customer.htmlHeader());
+    }
+
+    @Test
+    public void testHtmlFooterFormat() {
+        String expectedFooterFormat = String.format("Amount owed is <B>%s</B>.<BR/>You earned <B>%s</B> frequent renter points.<BR/>", 0.0, 0);
+        Assert.assertEquals(expectedFooterFormat, customer.htmlFooter());
     }
 
     @Test
@@ -158,6 +182,16 @@ public class CustomerTest {
     }
 
     @Test
+    public void testHtmlStatement_Regulars() {
+        List<Rental> rentals = new ArrayList<>();
+        rentals.add(new Rental(new Movie("Forest Gump", Movie.REGULAR), 1));
+        rentals.add(new Rental(new Movie("X-Men", Movie.REGULAR), 5));
+
+        rentals.forEach(customer::addRental);
+        Assert.assertEquals(expectedHtmlStatement(rentals), customer.htmlStatement());
+    }
+
+    @Test
     public void testStatement_Children() {
         List<Rental> rentals = new ArrayList<>();
         rentals.add(new Rental(new Movie("Boss Baby", Movie.CHILDRENS), 2));
@@ -186,6 +220,17 @@ public class CustomerTest {
         Assert.assertEquals(expectedStatement(rentals), customer.statement());
     }
 
+    @Test
+    public void testHtmlStatement_ChildrenMovies() {
+        List<Rental> rentals = new ArrayList<>();
+        rentals.add(new Rental(new Movie("Zootopia", Movie.CHILDRENS), 1));
+        rentals.add(new Rental(new Movie("The Incredibles", Movie.CHILDRENS), 5));
+
+        rentals.forEach(customer::addRental);
+
+        Assert.assertEquals(expectedHtmlStatement(rentals), customer.htmlStatement());
+    }
+
 
     @Test
     public void testStatement_NewRelease() {
@@ -195,6 +240,16 @@ public class CustomerTest {
         rentals.forEach(customer::addRental);
 
         Assert.assertEquals(expectedStatement(rentals), customer.statement());
+    }
+
+    @Test
+    public void testHtmlStatement_NewRelease() {
+        List<Rental> rentals = new ArrayList<>();
+        rentals.add(new Rental(new Movie("Avengers: Endgame", Movie.NEW_RELEASE), 1));
+
+        rentals.forEach(customer::addRental);
+
+        Assert.assertEquals(expectedHtmlStatement(rentals), customer.htmlStatement());
     }
 
     @Test
@@ -219,6 +274,17 @@ public class CustomerTest {
     }
 
     @Test
+    public void testHtmlStatement_NewReleases() {
+        List<Rental> rentals = new ArrayList<>();
+        rentals.add(new Rental(new Movie("Avengers: Endgame", Movie.NEW_RELEASE), 1));
+        rentals.add(new Rental(new Movie("The Tashkent Files", Movie.NEW_RELEASE), 4));
+
+        rentals.forEach(customer::addRental);
+
+        Assert.assertEquals(expectedHtmlStatement(rentals), customer.htmlStatement());
+    }
+
+    @Test
     public void testStatement_Movies() {
         List<Rental> rentals = new ArrayList<>();
         rentals.add(new Rental(new Movie("Forest Gump", Movie.REGULAR), 1));
@@ -231,7 +297,21 @@ public class CustomerTest {
         rentals.forEach(customer::addRental);
 
         Assert.assertEquals(expectedStatement(rentals), customer.statement());
+    }
 
+    @Test
+    public void testHtmlStatement_Movies() {
+        List<Rental> rentals = new ArrayList<>();
+        rentals.add(new Rental(new Movie("Forest Gump", Movie.REGULAR), 1));
+        rentals.add(new Rental(new Movie("X-Men", Movie.REGULAR), 5));
+        rentals.add(new Rental(new Movie("Zootopia", Movie.CHILDRENS), 1));
+        rentals.add(new Rental(new Movie("The Incredibles", Movie.CHILDRENS), 5));
+        rentals.add(new Rental(new Movie("Avengers: Endgame", Movie.NEW_RELEASE), 1));
+        rentals.add(new Rental(new Movie("The Tashkent Files", Movie.NEW_RELEASE), 4));
+
+        rentals.forEach(customer::addRental);
+
+        Assert.assertEquals(expectedHtmlStatement(rentals), customer.htmlStatement());
     }
 
 }

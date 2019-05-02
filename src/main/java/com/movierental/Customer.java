@@ -22,8 +22,6 @@ public class Customer {
   public String statement() {
     String result = "Rental Record for " + getName() + "\n";
 
-    // This refactor, however, forces amount to be calculated twice!!
-
     for (Rental rental : rentals) {
       //show figures for this rental
       result += "\t" + rental.getMovie().getTitle() + "\t" +
@@ -44,6 +42,34 @@ public class Customer {
 
   private double getTotalAmount() {
       return this.rentals.stream().mapToDouble(Rental::amount).sum();
+  }
+
+  public String htmlStatement() {
+      StringBuilder htmlStmtBuilder = new StringBuilder();
+
+      htmlStmtBuilder.append(htmlHeader());
+
+      // body
+      rentals.forEach(rental -> htmlStmtBuilder.append(htmlLineBody(rental)) );
+
+      htmlStmtBuilder.append(htmlFooter());
+
+      return htmlStmtBuilder.toString();
+  }
+
+  String htmlHeader() {
+      return String.format("<H1>Rental Record for %s</H1>", getName());
+  }
+
+  static String htmlLineBody(Rental rental) {
+      return String.format("<B>%s</B>: %s<BR/>", rental.getMovie().getTitle(), rental.amount());
+  }
+
+  String htmlFooter() {
+      StringBuilder footerBuilder = new StringBuilder();
+      footerBuilder.append(String.format("Amount owed is <B>%s</B>.<BR/>", getTotalAmount()));
+      footerBuilder.append(String.format("You earned <B>%s</B> frequent renter points.<BR/>", getTotalFRP()));
+      return footerBuilder.toString();
   }
 }
 
